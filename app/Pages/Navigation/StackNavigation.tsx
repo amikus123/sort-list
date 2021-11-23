@@ -3,6 +3,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../Home/Home/Home";
+import List from "../Home/List/List";
+
 import TemplateCreator from "../Templates/TempleteCreator";
 import { HomePaths,TemplatePaths} from "../../helpers/paths"
 
@@ -22,7 +24,7 @@ const HomeStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name={HomePaths.home} component={Home} />
-      {/* <Stack.Screen name={HomePaths.list} component={ListPage} /> */}
+      <Stack.Screen name={HomePaths.list} component={List} />
     </Stack.Navigator>
   );
 };

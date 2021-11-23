@@ -9,15 +9,15 @@ import {
   LayoutAnimation,
   TouchableOpacity,
 } from "react-native";
-import { ListItem } from "../../types";
+import { ListItem } from "../../../../helpers/types";
 
 interface props {
   items: ListItem[];
-  deleteItemById: (key: string) => void;
+  removeFromListById: (key: string) => void;
   openModalForIndex: (index: number) => void;
 }
 
-const EditTable = ({ items, deleteItemById, openModalForIndex }: props) => {
+const EditTable = ({ items, removeFromListById, openModalForIndex }: props) => {
   const layoutAnimConfig = {
     duration: 300,
     update: {
@@ -56,8 +56,6 @@ const EditTable = ({ items, deleteItemById, openModalForIndex }: props) => {
               fontSize: 32,
             }}
           >
-            {index}
-            " "
             {text}
           </Text>
           <View
@@ -74,17 +72,18 @@ const EditTable = ({ items, deleteItemById, openModalForIndex }: props) => {
           >
             <Pressable
               onPress={() => {
-                deleteItemById(id);
+                removeFromListById(id);
                 LayoutAnimation.configureNext(layoutAnimConfig);
               }}
             >
-              <Image source={require("../../assets/trash.png")} />
-            </Pressable>
+              <Image source={require("../../../../../assets/trash.png")} />
+              </Pressable>
           </View>
         </View>
       </TouchableOpacity>
     );
   };
+
   return (
     <FlatList
       data={items}

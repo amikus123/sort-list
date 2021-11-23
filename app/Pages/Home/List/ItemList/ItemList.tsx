@@ -1,24 +1,25 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useCallback, useEffect } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-} from "react-native";
+import { View, Text, Pressable, TouchableOpacity } from "react-native";
 import DraggableFlatList, {
   RenderItemParams,
 } from "react-native-draggable-flatlist";
-import { ListItem } from "../../../types";
-
+import { ListItem } from "../../../../helpers/types";
 interface props {
   setItems: React.Dispatch<React.SetStateAction<ListItem[]>>;
   items: ListItem[];
 }
 
 function ItemList({ items, setItems }: props) {
-  useEffect(() => {
-    console.log(items, '"13123');
-  }, [items]);
+  // we should  have state in this components, prevents jumping
+  // duting moving elements
+  const [listItems, setListItems] = useState<ListItem[]>(items)
+  // useEffect(() => {
+    
+  //   console.log(items, '"13123');
+  //   setListItems(listItems);
+  // }, [items]);
+
   const renderItem = useCallback(
     ({ item, index, drag, isActive }: RenderItemParams<ListItem>) => {
       return (
@@ -63,11 +64,12 @@ function ItemList({ items, setItems }: props) {
   return (
     <View style={{ flex: 1, display: "flex" }}>
       <DraggableFlatList
-        data={items}
+        data={listItems}
         renderItem={renderItem}
         keyExtractor={(item) => `draggable-item-${item.id}`}
-        onDragEnd={({ data }) => {
-          setItems(data);
+        onDragEnd={(data) => {
+          setListItems(data.data);
+          setItems(data.data);
         }}
       />
     </View>

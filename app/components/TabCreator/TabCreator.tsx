@@ -16,7 +16,6 @@ const TabCreator = ({ setText, text, handleTextSubmit }: TabCreatorProps) => {
           onChangeText={setText}
           onSubmitEditing={handleTextSubmit}
         />
-
         <Button
           onPress={() => {
             try {

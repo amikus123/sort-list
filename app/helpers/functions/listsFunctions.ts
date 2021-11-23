@@ -21,7 +21,7 @@ export const addFG = () :List=> {
   }
 };
 
-const randomShade = () => {
+export const randomShade = () => {
   var newColor =
     "rgb(" +
     (Math.floor((255 - 220) * Math.random()) + 219) +
