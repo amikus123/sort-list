@@ -1,21 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+/* eslint-disable prettier/prettier */
+import React from "react";
+import { StyleSheet } from "react-native";
+
+import { NavigationContainer } from "@react-navigation/native";
+
+import BottomTabNavigator from "./app/Pages/Navigation/TabNaviagtion";
+import { DataProvider } from "./app/helpers/context/dataContext";
+
+const linking = {
+  enabled: true, 
+  prefixes: ["https://mychat.com", "mychat://"]
+};
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <DataProvider>
+        <NavigationContainer linking={linking} >
+          <BottomTabNavigator />
+        </NavigationContainer>
+      </DataProvider>
+    </>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const styles = StyleSheet.create({});

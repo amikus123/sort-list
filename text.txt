@@ -1,0 +1,4 @@
+the purpose of this app - make user able to create and save tier list of things, and to pair Key with Property
+
+template - list of keys
+after creating a tierlist user can save it as a template
