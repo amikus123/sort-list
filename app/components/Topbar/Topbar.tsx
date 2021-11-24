@@ -1,16 +1,20 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Header } from "react-native-elements";
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Header } from 'react-native-elements';
 
-interface props {
-  children: string;
+interface TopbarProps {
+  title: string;
+  leftButton: any;
 }
 
-const Topbar = ({ children }: props) => {
-
+const Topbar = ({ title, leftButton }: TopbarProps): React.ReactNode => {
   return (
-<></>
-
+    <Header
+      style={{ width: '100%' }}
+      leftComponent={leftButton}
+      centerComponent={{ text: title, style: { color: '#fff' } }}
+      rightComponent={{ icon: 'home', color: '#fff' }}
+    />
   );
 };
 
@@ -18,13 +22,8 @@ export default Topbar;
 
 const styles = StyleSheet.create({});
 
-{/* <Header
-style={{ width: "100%" }}
-leftComponent={{
-  icon: "menu",
-  color: "#fff",
-  iconStyle: { color: "#fff" },
-}}
-centerComponent={{ text: children, style: { color: "#fff" } }}
-rightComponent={{ icon: "home", color: "#fff" }}
-/>  */}
+// headerStyle: {
+//   backgroundColor: '#9AC4F8',
+// },
+// headerTintColor: 'white',
+// headerBackTitle: 'Back',

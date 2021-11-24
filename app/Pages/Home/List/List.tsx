@@ -1,50 +1,44 @@
-/* eslint-disable prettier/prettier */
-import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, StatusBar, View, Text } from "react-native";
-import { Button } from "react-native-elements";
-import ItemList from "./ItemList/ItemList";
-import TabCreator from "../../../components/TabCreator/TabCreator";
-import TextModal from "./TextModal/TextModal";
-import { DataContext } from "../../../helpers/context/dataContext";
-import { ListItem, List } from "../../../helpers/types";
-import EditTable from "./EditTable/EditTable";
-import { useNavigation } from "@react-navigation/core";
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, StatusBar, View, Text, Button } from 'react-native';
+import ItemList from './ItemList/ItemList';
+import TabCreator from '../../../components/TabCreator/TabCreator';
+import TextModal from './TextModal/TextModal';
+import { DataContext } from '../../../helpers/context/dataContext';
+import { List } from '../../../helpers/types';
+import EditTable from './EditTable/EditTable';
+import { useNavigation } from '@react-navigation/core';
 
 export const ListList = () => {
-  const {
-    lists,
-    selectedListIndex,
-    listModificationFunctions,
-    setSelectedListIndex,
-  } = useContext(DataContext);
+  const { lists, selectedListIndex, listModificationFunctions, setSelectedListIndex } =
+    useContext(DataContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalText, setModalText] = useState('');
   const [modalEditValue, setModalEditValue] = useState(-1);
-  const [modalText, setModalText] = useState("");
-  const [text, setText] = useState("");
+  const [tabCreatorText, setTabCreatorText] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [list, setList] = useState<List | null>(null);
 
-  const { modifyListById, removeFromListById, modifyContent, addItemToList } =
+  const { removeFromListById, modifyContent, addItemToList, modifyListItemById } =
     listModificationFunctions;
+
   useEffect(() => {
     setList(lists[selectedListIndex]);
   }, [selectedListIndex, lists]);
+
   const navigation = useNavigation();
 
   useEffect(() => {
-    navigation.addListener("beforeRemove", (e) => {
+    navigation.addListener('beforeRemove', () => {
       if (selectedListIndex !== -1) {
         setSelectedListIndex(-1);
       }
     });
   }, [navigation, selectedListIndex]);
 
-  const handleTextSubmit = () => {
-    if (text !== "") {
-      addItemToList(text);
-      setText("");
-    } else {
-      setModalVisible(true);
+  const handleTabCreatorSubmit = () => {
+    if (tabCreatorText !== '') {
+      addItemToList(tabCreatorText);
+      setTabCreatorText('');
     }
   };
 
@@ -56,15 +50,17 @@ export const ListList = () => {
   };
 
   const handleModalSubmit = () => {
-    const copy = list.content.slice();
-    if (modalText !== "") {
-      addItemToList(text);
-      setModalText("");
-      setModalVisible(false);
-      setModalEditValue(-1);
-      copy[modalEditValue].text = modalText;
+    // Modal is opened on list item click during edit mode
+    // if text is empty, we remove the item
+    // else, we change its text
+    if (modalText !== '') {
+      modifyListItemById(modalEditValue, modalText);
     } else {
+      removeFromListById(list.content[modalEditValue].id);
     }
+    setModalText('');
+    setModalVisible(false);
+    setModalEditValue(-1);
   };
 
   return (
@@ -79,21 +75,13 @@ export const ListList = () => {
 
       {list !== undefined && list !== null ? (
         <View style={styles.scrollView}>
-          <Text>{list.title} </Text>
-          <TabCreator
-            text={text}
-            setText={setText}
-            handleTextSubmit={handleTextSubmit}
+          <Button
+            onPress={() => {
+              setEditMode(!editMode);
+            }}
+            title={editMode ? 'Edit Mode' : 'Drag Mode'}
+            color={editMode ? 'blue' : 'red'}
           />
-          <View>
-            <Button
-              onPress={() => {
-                setEditMode(!editMode);
-              }}
-              title="Toggle mode"
-            />
-          </View>
-
           {editMode ? (
             <EditTable
               removeFromListById={removeFromListById}
@@ -103,6 +91,12 @@ export const ListList = () => {
           ) : (
             <ItemList items={list.content} setItems={modifyContent} />
           )}
+          <TabCreator
+            text={tabCreatorText}
+            setText={setTabCreatorText}
+            handleTextSubmit={handleTabCreatorSubmit}
+          />
+          <View></View>
         </View>
       ) : (
         <Text>loading</Text>
@@ -119,9 +113,8 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
 
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "pink",
+    display: 'flex',
+    flexDirection: 'column',
   },
 });
 

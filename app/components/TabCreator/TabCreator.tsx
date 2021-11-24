@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import React from 'react';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 interface TabCreatorProps {
   setText: React.Dispatch<React.SetStateAction<string>>;
   text: string;
@@ -25,7 +25,7 @@ const TabCreator = ({ setText, text, handleTextSubmit }: TabCreatorProps) => {
             }
           }}
           title="Add item"
-          color="#080808"
+          color="green"
         />
       </View>
     </View>
@@ -36,16 +36,16 @@ export default TabCreator;
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "red",
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '1rem',
   },
   wrapper: {
-    width: "80%",
-    display: "flex",
-    justifyContent: "center",
+    width: '80%',
+    display: 'flex',
+    justifyContent: 'center',
   },
   input: {
     height: 40,

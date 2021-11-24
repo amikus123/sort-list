@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   FlatList,
   Pressable,
@@ -8,8 +8,9 @@ import {
   Image,
   LayoutAnimation,
   TouchableOpacity,
-} from "react-native";
-import { ListItem } from "../../../../helpers/types";
+} from 'react-native';
+import { ListItem } from '../../../../helpers/types';
+import { Icon } from 'react-native-elements';
 
 interface props {
   items: ListItem[];
@@ -39,20 +40,19 @@ const EditTable = ({ items, removeFromListById, openModalForIndex }: props) => {
           openModalForIndex(index);
         }}
       >
-        
         <View
           style={{
             height: 100,
-            width: "100%",
+            width: '100%',
             backgroundColor: color,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Text
             style={{
-              fontWeight: "bold",
-              color: "white",
+              fontWeight: 'bold',
+              color: 'white',
               fontSize: 32,
             }}
           >
@@ -60,14 +60,14 @@ const EditTable = ({ items, removeFromListById, openModalForIndex }: props) => {
           </Text>
           <View
             style={{
-              position: "absolute",
+              position: 'absolute',
               right: 10,
               top: 0,
               height: 100,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "row",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
             }}
           >
             <Pressable
@@ -76,21 +76,15 @@ const EditTable = ({ items, removeFromListById, openModalForIndex }: props) => {
                 LayoutAnimation.configureNext(layoutAnimConfig);
               }}
             >
-              <Image source={require("../../../../../assets/trash.png")} />
-              </Pressable>
+              <Icon name="trash" type="font-awesome-5" />
+            </Pressable>
           </View>
         </View>
       </TouchableOpacity>
     );
   };
 
-  return (
-    <FlatList
-      data={items}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-    />
-  );
+  return <FlatList data={items} renderItem={renderItem} keyExtractor={(item) => item.id} />;
 };
 
 export default EditTable;

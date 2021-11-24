@@ -23,7 +23,6 @@ const MyCard = ({desc,title,onClick,buttonText,color="rgb(32, 137, 220)"}: CardP
     <Card>
       <Card.Title>{title}</Card.Title>
       <Card.Divider />
-      <Text style={{ marginBottom: 10 }}>{desc}</Text>
       <Button
         onPress={onClick}
         buttonStyle={{

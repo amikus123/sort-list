@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const storeData = async (value: any, key: string) => {
   try {
@@ -6,6 +6,7 @@ export const storeData = async (value: any, key: string) => {
     await AsyncStorage.setItem(key, jsonValue);
   } catch (e) {
     // saving error
+    console.log(e);
   }
 };
 
@@ -15,36 +16,15 @@ export const getData = async (key: string) => {
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     // error reading value
+    console.log(e);
   }
 };
-
-export const getKeys = async () => {
-  const templeteKeys = await getData("templeteKeys");
-  const listKeys = await getData("listKeys");
-
-  return {
-    templeteKeys,
-    listKeys,
-  };
-};
-
 export const getInitialData = async () => {
-  const keys = await getKeys();
-  const listPromises = [];
-  const templatePromises = [];
+  const lists = await getData('lists');
+  const templates = await getData('templates');
 
-  for (const x in keys.listKeys) {
-    listPromises.push(getData(x));
-  }
-  for (const x in keys.templeteKeys) {
-    templatePromises.push(getData(x));
-  }
-  const listPromisesSolved = await Promise.all(listPromises);
-  const templatePromisesSolved = await Promise.all(templatePromises);
-
-  // setLists(res);
   return {
-    lists:listPromisesSolved,
-    templates:templatePromisesSolved
+    lists,
+    templates,
   };
 };
