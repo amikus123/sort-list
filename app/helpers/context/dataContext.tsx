@@ -1,6 +1,11 @@
 import React, { createContext, useState, useEffect } from "react";
 import { uid } from "uid";
-import { addFG, randomShade, addFgTemplate } from "../functions/listsFunctions";
+import {
+  addFG,
+  randomShade,
+  addFgTemplate,
+  createList,
+} from "../functions/listsFunctions";
 import { getInitialData, storeData } from "../functions/storageFunctions";
 import { List, ListItem, Template } from "../types";
 
@@ -11,11 +16,12 @@ export const DataProvider = ({ children }: { children: any }) => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [finishedFetching, setFinishedFetching] = useState(false);
   const [selectedTemplateIndex, setSelectedTemplateIndex] = useState(-1);
-
   const [selectedListIndex, setSelectedListIndex] = useState(-1);
+
   useEffect(() => {
     console.log("ZMIANA");
   }, [lists, templates]);
+
   const initiation = async () => {
     const storage = await getInitialData();
     setFinishedFetching(true);
@@ -80,9 +86,19 @@ export const DataProvider = ({ children }: { children: any }) => {
   const modifyContent = (newContent: ListItem[]) => {
     modifyListById({ ...getSelectedList(), content: newContent });
   };
-  const addList = (title: string) => {
-    const newList: List = { title, content: [], description: "" };
+  const addList = (title: string, selectedTemplateIndex = 0) => {
+    // selectedTemplateIndex is decremendted, if it is equal to -1 we dont use one
+    selectedTemplateIndex -= 1;
+    let chosenTemplate: string[] = [];
+    if (selectedTemplateIndex !== -1) {
+      chosenTemplate = templates[selectedTemplateIndex].content;
+    }
+    const newList: List = createList(title, chosenTemplate);
     const newState = [...lists, newList];
+    setLists(newState);
+  };
+  const removeListByIndex = (indexToRemove: number) => {
+    const newState = lists.filter((item, index) => index !== indexToRemove);
     setLists(newState);
   };
   // wrapper for all functions related to modifying state
@@ -93,6 +109,7 @@ export const DataProvider = ({ children }: { children: any }) => {
     modifyContent,
     addList,
     modifyListItemById,
+    removeListByIndex,
   };
   // TEMPLATE FUNCTIONS
   const getSelectedTemplate = (): Template => {
@@ -141,6 +158,10 @@ export const DataProvider = ({ children }: { children: any }) => {
     const newState = [...templates, newList];
     setTemplates(newState);
   };
+  const removeTemplateByIndex = (indexToRemove: number) => {
+    const newState = templates.filter((item, index) => index !== indexToRemove);
+    setTemplates(newState);
+  };
   const templateModifcationFunctions = {
     addItemToTemplate,
     modifyTemplateById,
@@ -148,6 +169,7 @@ export const DataProvider = ({ children }: { children: any }) => {
     removeFromTemplateByContent,
     modifyTemplateItemById,
     addTemplate,
+    removeTemplateByIndex,
   };
   useEffect(() => {
     initiation();

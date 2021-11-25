@@ -13,8 +13,9 @@ const Templates = () => {
     templates,
     selectedTemplateIndex,
     setSelectedTemplateIndex,
-    addTemplate,
+    templateModifcationFunctions,
   } = useContext(DataContext);
+  const { addTemplate, removeTemplateByIndex } = templateModifcationFunctions;
   const [modalVisible, setModalVisible] = useState(false);
   const [modalText, setModalText] = useState("");
   const navigation = useNavigation();
@@ -33,8 +34,17 @@ const Templates = () => {
       setSelectedTemplateIndex(index);
       console.log("CHANLGED");
     };
+    const handleRemove = () => {
+      removeTemplateByIndex(index);
+    };
     return (
-      <MyCard title={title} desc={""} buttonText="Open" onClick={handleClick} />
+      <MyCard
+        handleRemove={handleRemove}
+        title={title}
+        desc={""}
+        buttonText="Open"
+        onClick={handleClick}
+      />
     );
   };
   //should add new list to state
@@ -61,7 +71,7 @@ const Templates = () => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         handleModalSubmit={handleModalSubmit}
-        buttonText="Create List"
+        buttonText="Add Template"
       />
 
       <FlatList

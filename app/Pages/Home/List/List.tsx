@@ -27,6 +27,7 @@ export const ListList = () => {
     modifyContent,
     addItemToList,
     modifyListItemById,
+    removeListByIndex
   } = listModificationFunctions;
 
   useEffect(() => {
