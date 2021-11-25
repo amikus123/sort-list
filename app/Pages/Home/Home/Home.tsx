@@ -7,7 +7,7 @@ import { HomePaths } from '../../../helpers/paths';
 import { List } from '../../../helpers/types';
 import { Button } from 'react-native-elements';
 import { StackActions } from '@react-navigation/native';
-import TextModal from '../List/TextModal/TextModal';
+import TextModal from '../../../components/TextModal/TextModal';
 
 export type TabParamList = {
   List: { list: List };
@@ -62,6 +62,7 @@ const HomeHome = () => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         handleModalSubmit={handleModalSubmit}
+        buttonText="Create List"
       />
 
       <FlatList data={lists} renderItem={({ item, index }) => createCard(item, index)} />

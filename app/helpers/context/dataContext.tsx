@@ -1,8 +1,8 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { uid } from 'uid';
-import { addFG, randomShade, addFgTemplate } from '../functions/listsFunctions';
-import { getInitialData, storeData } from '../functions/storageFunctions';
-import { List, ListItem, Template } from '../types';
+import React, { createContext, useState, useEffect } from "react";
+import { uid } from "uid";
+import { addFG, randomShade, addFgTemplate } from "../functions/listsFunctions";
+import { getInitialData, storeData } from "../functions/storageFunctions";
+import { List, ListItem, Template } from "../types";
 
 export const DataContext = createContext(null);
 
@@ -10,23 +10,24 @@ export const DataProvider = ({ children }: { children: any }) => {
   const [lists, setLists] = useState<List[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
   const [finishedFetching, setFinishedFetching] = useState(false);
+  const [selectedTemplateIndex, setSelectedTemplateIndex] = useState(-1);
 
   const [selectedListIndex, setSelectedListIndex] = useState(-1);
   useEffect(() => {
-    console.log(lists, 'ZMIANA');
-  }, [lists]);
+    console.log("ZMIANA");
+  }, [lists, templates]);
   const initiation = async () => {
     const storage = await getInitialData();
     setFinishedFetching(true);
-    if (storage.lists !== null && storage.lists.length === 0) {
+    if (storage.lists === null || storage.lists.length === 0) {
       setLists([addFG()]);
     } else {
       setLists(storage.lists);
     }
-    if (storage.templates !== null && storage.templates.length === 0) {
+    if (storage.templates === null || storage.templates.length === 0) {
       setTemplates([addFgTemplate()]);
     } else {
-      setTemplates([storage.templates]);
+      setTemplates(storage.templates);
     }
   };
 
@@ -35,11 +36,11 @@ export const DataProvider = ({ children }: { children: any }) => {
       if (selectedListIndex !== -1) {
         return lists[selectedListIndex];
       } else {
-        console.error('FFFF selected index is 0');
+        console.error("FFFF selected index is 0");
         return lists[0];
       }
     } catch (e) {
-      console.error('FFFF selected index is 0', e);
+      console.error("FFFF selected index is 0", e);
     }
   };
 
@@ -47,8 +48,8 @@ export const DataProvider = ({ children }: { children: any }) => {
     const newState = [...lists];
     newState[index] = newList;
     setLists(newState);
-    storeData(newState, 'lists');
-    console.log('new state dropped');
+    storeData(newState, "lists");
+    console.log("new state dropped");
     // on change save to storage
   };
 
@@ -59,6 +60,7 @@ export const DataProvider = ({ children }: { children: any }) => {
     const newObj = { ...list, content: res };
     modifyListById(newObj);
   };
+
   const modifyListItemById = (id: number, newValue: string) => {
     const list = getSelectedList();
     list.content[id].text = newValue;
@@ -79,7 +81,7 @@ export const DataProvider = ({ children }: { children: any }) => {
     modifyListById({ ...getSelectedList(), content: newContent });
   };
   const addList = (title: string) => {
-    const newList: List = { title, content: [], description: '' };
+    const newList: List = { title, content: [], description: "" };
     const newState = [...lists, newList];
     setLists(newState);
   };
@@ -91,6 +93,55 @@ export const DataProvider = ({ children }: { children: any }) => {
     modifyContent,
     addList,
     modifyListItemById,
+  };
+  // TEMPLATE FUNCTIONS
+  const getSelectedTemplate = (): Template => {
+    try {
+      if (selectedTemplateIndex !== -1) {
+        return templates[selectedTemplateIndex];
+      } else {
+        console.error("FFFF selected index is 0");
+        return templates[0];
+      }
+    } catch (e) {
+      console.error("FFFF selected index is 0", e);
+      return templates[0];
+    }
+  };
+  const removeFromTemplateByContent = (text: string) => {
+    const template = getSelectedTemplate();
+    const res = template.content.filter((item) => item !== text);
+    const newObj = { ...template, content: res };
+    modifyTemplateById(newObj);
+  };
+  const modifyTemplateItemById = (id: number, newValue: string) => {
+    const template = getSelectedTemplate();
+    template.content[id] = newValue;
+    modifyTemplateById(template);
+  };
+  const modifyTemplateById = (
+    newTemplate: Template,
+    index = selectedTemplateIndex
+  ) => {
+    const newState = [...templates];
+    newState[index] = newTemplate;
+    setTemplates(newState);
+    storeData(newState, "templates");
+    console.log("new state dropped");
+    // on change save to storage
+  };
+  const addItemToTemplate = (itemText: string) => {
+    const newObj = getSelectedTemplate();
+    newObj.content.push(itemText);
+    modifyTemplateById(newObj);
+  };
+
+  const templateModifcationFunctions = {
+    addItemToTemplate,
+    modifyTemplateById,
+    getSelectedTemplate,
+    removeFromTemplateByContent,
+    modifyTemplateItemById,
   };
   useEffect(() => {
     initiation();
@@ -104,6 +155,9 @@ export const DataProvider = ({ children }: { children: any }) => {
     setSelectedListIndex,
     selectedListIndex,
     listModificationFunctions,
+    selectedTemplateIndex,
+    setSelectedTemplateIndex,
+    templateModifcationFunctions,
   };
   return (
     <DataContext.Provider value={{ ...val }}>

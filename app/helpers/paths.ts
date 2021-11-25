@@ -1,7 +1,13 @@
+// root is for tabs
+// home is main page
+// list is for veiwing selected
 export enum HomePaths {
-  home = 'Home',
-  list = 'List',
+  root = "List Home",
+  home = "Home",
+  list = "List",
 }
 export enum TemplatePaths {
-  home = 'Templates',
+  root = "Templates Home",
+  home = "Templates",
+  list = "TemplatesList",
 }

@@ -1,51 +1,48 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, StatusBar, View, Text, Button } from "react-native";
-import ItemList from "./ItemList/ItemList";
 import TabCreator from "../../../components/TabCreator/TabCreator";
 import { DataContext } from "../../../helpers/context/dataContext";
-import { List } from "../../../helpers/types";
+import { List, Template } from "../../../helpers/types";
 import EditTable from "./EditTable/EditTable";
 import { useNavigation } from "@react-navigation/core";
 import TextModal from "../../../components/TextModal/TextModal";
 
-export const ListList = () => {
+export const TemplatesList = () => {
   const {
-    lists,
-    selectedListIndex,
-    listModificationFunctions,
-    setSelectedListIndex,
+    templates,
+    selectedTemplateIndex,
+    templateModifcationFunctions,
+    setSelectedTemplateIndex,
   } = useContext(DataContext);
+  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalText, setModalText] = useState("");
   const [modalEditValue, setModalEditValue] = useState(-1);
   const [tabCreatorText, setTabCreatorText] = useState("");
-  const [editMode, setEditMode] = useState(false);
-  const [list, setList] = useState<List | null>(null);
+  const [template, setTemplate] = useState<Template | null>(null);
 
   const {
-    removeFromListById,
-    modifyContent,
-    addItemToList,
-    modifyListItemById,
-  } = listModificationFunctions;
+    addItemToTemplate,
+    modifyTemplateById,
+    removeFromTemplateByContent,
+    modifyTemplateItemById,
+  } = templateModifcationFunctions;
 
   useEffect(() => {
-    setList(lists[selectedListIndex]);
-  }, [selectedListIndex, lists]);
-
-  const navigation = useNavigation();
+    setTemplate(templates[selectedTemplateIndex]);
+  }, [selectedTemplateIndex, templates]);
 
   useEffect(() => {
     navigation.addListener("beforeRemove", () => {
-      if (selectedListIndex !== -1) {
-        setSelectedListIndex(-1);
+      if (selectedTemplateIndex !== -1) {
+        setSelectedTemplateIndex(-1);
       }
     });
-  }, [navigation, selectedListIndex]);
+  }, [navigation, selectedTemplateIndex]);
 
   const handleTabCreatorSubmit = () => {
     if (tabCreatorText !== "") {
-      addItemToList(tabCreatorText);
+      addItemToTemplate(tabCreatorText);
       setTabCreatorText("");
     }
   };
@@ -54,7 +51,7 @@ export const ListList = () => {
   const openModalForIndex = (index: number) => {
     setModalEditValue(index);
     setModalVisible(true);
-    setModalText(list.content[index].text);
+    setModalText(template.content[index]);
   };
 
   const handleModalSubmit = () => {
@@ -62,9 +59,9 @@ export const ListList = () => {
     // if text is empty, we remove the item
     // else, we change its text
     if (modalText !== "") {
-      modifyListItemById(modalEditValue, modalText);
+      modifyTemplateItemById(modalEditValue, modalText);
     } else {
-      removeFromListById(list.content[modalEditValue].id);
+      removeFromTemplateByContent(template.content[modalEditValue]);
     }
     setModalText("");
     setModalVisible(false);
@@ -81,30 +78,18 @@ export const ListList = () => {
         handleModalSubmit={handleModalSubmit}
       />
 
-      {list !== undefined && list !== null ? (
+      {template !== undefined && template !== null ? (
         <View style={styles.scrollView}>
-          <Button
-            onPress={() => {
-              setEditMode(!editMode);
-            }}
-            title={editMode ? "Edit Mode" : "Drag Mode"}
-            color={editMode ? "blue" : "red"}
+          <EditTable
+            removeFromTemplateByContent={removeFromTemplateByContent}
+            items={template.content}
+            openModalForIndex={openModalForIndex}
           />
-          {editMode ? (
-            <EditTable
-              removeFromListById={removeFromListById}
-              items={list.content}
-              openModalForIndex={openModalForIndex}
-            />
-          ) : (
-            <ItemList items={list.content} setItems={modifyContent} />
-          )}
           <TabCreator
             text={tabCreatorText}
             setText={setTabCreatorText}
             handleTextSubmit={handleTabCreatorSubmit}
           />
-          <View></View>
         </View>
       ) : (
         <Text>loading</Text>
@@ -126,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListList;
+export default TemplatesList;

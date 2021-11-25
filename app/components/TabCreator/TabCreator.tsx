@@ -4,9 +4,15 @@ interface TabCreatorProps {
   setText: React.Dispatch<React.SetStateAction<string>>;
   text: string;
   handleTextSubmit: () => void;
+  buttonText?: string;
 }
 
-const TabCreator = ({ setText, text, handleTextSubmit }: TabCreatorProps) => {
+const TabCreator = ({
+  setText,
+  text,
+  handleTextSubmit,
+  buttonText = 'Add Item',
+}: TabCreatorProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -24,7 +30,7 @@ const TabCreator = ({ setText, text, handleTextSubmit }: TabCreatorProps) => {
               console.log(e);
             }
           }}
-          title="Add item"
+          title={buttonText}
           color="green"
         />
       </View>
