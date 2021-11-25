@@ -136,12 +136,18 @@ export const DataProvider = ({ children }: { children: any }) => {
     modifyTemplateById(newObj);
   };
 
+  const addTemplate = (title: string) => {
+    const newList: Template = { title, content: [] };
+    const newState = [...templates, newList];
+    setTemplates(newState);
+  };
   const templateModifcationFunctions = {
     addItemToTemplate,
     modifyTemplateById,
     getSelectedTemplate,
     removeFromTemplateByContent,
     modifyTemplateItemById,
+    addTemplate,
   };
   useEffect(() => {
     initiation();
@@ -158,6 +164,7 @@ export const DataProvider = ({ children }: { children: any }) => {
     selectedTemplateIndex,
     setSelectedTemplateIndex,
     templateModifcationFunctions,
+    addTemplate,
   };
   return (
     <DataContext.Provider value={{ ...val }}>

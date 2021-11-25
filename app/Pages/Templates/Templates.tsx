@@ -1,15 +1,22 @@
 import { useNavigation } from "@react-navigation/core";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, FlatList, Text } from "react-native";
 import { StackActions } from "@react-navigation/native";
 import MyCard from "../../components/Cards/MyCard";
 import { DataContext } from "../../helpers/context/dataContext";
 import { TemplatePaths } from "../../helpers/paths";
 import { Template } from "../../helpers/types";
+import TextModal from "../../components/TextModal/TextModal";
 
 const Templates = () => {
-  const { templates, selectedTemplateIndex, setSelectedTemplateIndex } =
-    useContext(DataContext);
+  const {
+    templates,
+    selectedTemplateIndex,
+    setSelectedTemplateIndex,
+    addTemplate,
+  } = useContext(DataContext);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalText, setModalText] = useState("");
   const navigation = useNavigation();
   useEffect(() => {
     if (selectedTemplateIndex !== -1) {
@@ -32,11 +39,31 @@ const Templates = () => {
   };
   //should add new list to state
   const handleAdd = () => {
-    console.log("TODO");
+    setModalVisible(true);
   };
 
+  const handleModalSubmit = () => {
+    if (modalText !== "") {
+      const newTemplateIndex = templates.length;
+      addTemplate(modalText);
+      setModalText("");
+      setModalVisible(false);
+      setSelectedTemplateIndex(newTemplateIndex);
+    } else {
+      console.log("E<");
+    }
+  };
   return (
     <>
+      <TextModal
+        text={modalText}
+        setText={setModalText}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        handleModalSubmit={handleModalSubmit}
+        buttonText="Create List"
+      />
+
       <FlatList
         data={templates}
         renderItem={({ item, index }) => createCard(item, index)}
@@ -44,9 +71,9 @@ const Templates = () => {
       <MyCard
         onClick={handleAdd}
         desc=""
-        title="NEED TO LIST"
-        buttonText="Add Temlate"
-        color="yellow"
+        title="Need more templates?"
+        buttonText="Add Template"
+        color="green"
       />
     </>
   );
