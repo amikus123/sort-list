@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '1rem',
+    padding: 16,
   },
   wrapper: {
     width: '80%',

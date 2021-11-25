@@ -24,13 +24,16 @@ const HomeRadioButtons = ({
   };
 
   return (
-    <ButtonGroup
-      vertical={true}
-      onPress={updateIndex}
-      selectedIndex={templateIndex}
-      buttons={buttons}
-      buttonStyle={{ minHeight: 40, width: 60 }}
-    />
+    <View>
+      <ButtonGroup
+        vertical={true}
+        onPress={updateIndex}
+        selectedIndex={templateIndex}
+        buttons={buttons}
+        buttonStyle={{ height: 10, width: 50 }}
+        containerStyle={{ height: 100, width: 50 }}
+      />
+    </View>
   );
 };
 
