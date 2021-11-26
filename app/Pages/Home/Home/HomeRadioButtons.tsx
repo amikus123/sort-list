@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { ButtonGroup } from "react-native-elements";
 import { DataContext } from "../../../helpers/context/dataContext";
 
@@ -24,16 +24,27 @@ const HomeRadioButtons = ({
   };
 
   return (
-    <View>
+    <ScrollView
+      style={{
+        height: 200,
+        width: 140,
+        padding: 10,
+      }}
+    >
       <ButtonGroup
         vertical={true}
         onPress={updateIndex}
         selectedIndex={templateIndex}
         buttons={buttons}
-        buttonStyle={{ height: 10, width: 50 }}
-        containerStyle={{ height: 100, width: 50 }}
+        buttonStyle={{ height: 15, width: 80 }}
+        containerStyle={{
+          width: 100,
+          flex: 1,
+          alignItems: "center",
+          flexDirection: "column",
+        }}
       />
-    </View>
+    </ScrollView>
   );
 };
 

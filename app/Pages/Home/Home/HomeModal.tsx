@@ -47,14 +47,14 @@ const TextModal = ({
             e.stopPropagation();
           }}
         >
-          <Text>Name the list</Text>
+          <Text style={styles.header}>Name the list</Text>
           <HomeTabCreator
             text={text}
             setText={setText}
             handleTextSubmit={handleModalSubmit}
             buttonText={buttonText}
           />
-          <Text>Choose template</Text>
+          <Text style={styles.header}>Choose template</Text>
           <HomeRadioButtons
             templateIndex={templateIndex}
             setTemplateIndex={setTemplateIndex}
@@ -85,10 +85,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    padding: 4,
   },
   button: {
     padding: 10,
     elevation: 2,
+  },
+  header: {
+    fontSize: 20,
   },
   buttonOpen: {
     backgroundColor: "#F194FF",

@@ -96,6 +96,7 @@ export const DataProvider = ({ children }: { children: any }) => {
     const newList: List = createList(title, chosenTemplate);
     const newState = [...lists, newList];
     setLists(newState);
+    setSelectedListIndex(newState.length - 1);
   };
   const removeListByIndex = (indexToRemove: number) => {
     const newState = lists.filter((item, index) => index !== indexToRemove);

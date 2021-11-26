@@ -5,9 +5,7 @@ import MyCard from "../../../components/Cards/MyCard";
 import { DataContext } from "../../../helpers/context/dataContext";
 import { HomePaths } from "../../../helpers/paths";
 import { List } from "../../../helpers/types";
-import { Button } from "react-native-elements";
 import { StackActions } from "@react-navigation/native";
-import RadioText from "../../../components/RadioText";
 import HomeTextModal from "./HomeModal";
 export type TabParamList = {
   List: { list: List };
